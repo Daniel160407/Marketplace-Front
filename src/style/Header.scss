@@ -1,0 +1,126 @@
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+
+  #title {
+    font-size: 2rem;
+    color: #333;
+    margin: 0;
+  }
+
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      background-color: #004085;
+    }
+  }
+
+  .addNewWindowContainer {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    width: 100%;
+    z-index: 1000;
+    padding-top: 100px;
+
+    .add-new-window {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+      .arrow {
+        display: flex;
+        align-items: center;
+        width: 20px;
+        font-size: 1em;
+        color: #007bff;
+        cursor: pointer;
+        margin-bottom: 20px;
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
+      }
+    
+      .form-group {
+        margin-bottom: 15px;
+    
+        label {
+          display: block;
+          margin-bottom: 5px;
+          font-weight: bold;
+          color: #555;
+        }
+    
+        input[type="text"],
+        textarea {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-sizing: border-box;
+        }
+    
+        input[type="file"] {
+          padding: 10px 0;
+        }
+    
+        textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+      }
+    
+      .submit-btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    
+        &:hover {
+          background-color: #45a049;
+        }
+      }
+    }
+    
+  }
+}
