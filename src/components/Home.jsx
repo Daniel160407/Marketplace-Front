@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import '../style/Home.scss';
 
 const Home = ({ updatedProducts }) => {
@@ -9,8 +8,8 @@ const Home = ({ updatedProducts }) => {
     const [products, setProducts] = useState([]);
     const [showProduct, setShowProduct] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [sortCriteria, setSortCriteria] = useState('name'); // Default sort by name
-    const [sortDirection, setSortDirection] = useState('asc'); // Default sort direction
+    const [sortCriteria, setSortCriteria] = useState('name');
+    const [sortDirection, setSortDirection] = useState('asc');
 
     useEffect(() => {
         axios.get('http://localhost:8080/marketplace/product/amount')
