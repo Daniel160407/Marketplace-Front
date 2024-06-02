@@ -4,17 +4,19 @@ import Cookies from 'js-cookie';
 import '../../style/authorization/Login.scss';
 
 const Login = ({ logIn }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [name, setName] = useState(undefined);
+    const [email, setEmail] = useState(undefined);
+    const [password, setPassword] = useState(undefined);
     const [errorMessage, setErrorMessage] = useState('');
     const [showRegistrationForm, setShowRegistrationForm] = useState(false);
 
     useEffect(() => {
+        const username = Cookies.get('username');
         const email = Cookies.get('email');
         const password = Cookies.get('password');
 
-        if(email && password){
+        if(username && email && password){
+            setName(username);
             setEmail(email);
             setPassword(password);
 
@@ -26,16 +28,18 @@ const Login = ({ logIn }) => {
         if (event) event.preventDefault();
 
         const user = {
-            name: name,
             email: savedEmail || email,
             password: savedPassword || password
         };
-
+        
         axios.post('http://localhost:8080/marketplace/login', user)
-            .then(() => {
+            .then(response => {
+                console.log(response.data.name);
+                Cookies.set('username', response.data.name, {expires: 1});
                 Cookies.set('email', user.email, {expires: 1});
                 Cookies.set('password', user.password, {expires: 1});
-                logIn(true);
+                setName(response.data.name);
+                logIn(true); 
             })
             .catch(() => setErrorMessage('Invalid email or password'));
     };
@@ -51,6 +55,9 @@ const Login = ({ logIn }) => {
 
         axios.post('http://localhost:8080/marketplace/login/register', user)
             .then(() => {
+                Cookies.set('username', user.name, {expires: 1});
+                Cookies.set('email', user.email, {expires: 1});
+                Cookies.set('password', user.password, {expires: 1});
                 setShowRegistrationForm(false);
             })
             .catch(() => setErrorMessage('This account is already registered'));

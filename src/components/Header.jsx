@@ -13,12 +13,17 @@ const Header = ({ setProducts }) => {
     const [image, setImage] = useState(null);
     const [username, setUsername] = useState('');
 
-    const [isLoggedIn, setIsLoggedIn] = useState(Cookies.get('isLoggedIn'));
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
 
     useEffect(() => {
-        if(Cookies.get('email') !== undefined && Cookies.get('password') !== undefined){
-            setShowLogin(true);   
+        setUsername(Cookies.get('username'));
+    }, [isLoggedIn]);
+
+    useEffect(() => {
+        if(Cookies.get('username') !== undefined && Cookies.get('email') !== undefined && Cookies.get('password') !== undefined){
+            setUsername(Cookies.get('username'));
+            setShowLogin(true);
         }
     }, [])
 
@@ -32,7 +37,6 @@ const Header = ({ setProducts }) => {
         formData.append('submittionTime', new Date().toLocaleDateString());
         formData.append('image', image);
         formData.append('uploader', username);
-        console.log(username);
 
         axios.post('http://localhost:8080/marketplace/product', formData, {
             headers: {
@@ -55,7 +59,9 @@ const Header = ({ setProducts }) => {
     }
 
     const handleLogout = () => {
-        Cookies.remove('isLoggedIn');
+        Cookies.remove('username');
+        Cookies.remove('email');
+        Cookies.remove('password');
         setIsLoggedIn(false);
     }
 
