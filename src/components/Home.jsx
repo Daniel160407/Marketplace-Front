@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import '../style/Home.scss';
 
 // eslint-disable-next-line react/prop-types
@@ -88,6 +89,7 @@ const Home = ({updatedProducts}) => {
                     <img className="productImg" src={selectedProduct.photoUrl} alt={selectedProduct.name}/>
                     <h1>{selectedProduct.name}</h1>
                     <p>{selectedProduct.submittionTime}</p>
+                    <p>{selectedProduct.uploader}</p>
                     <p>{selectedProduct.description}</p>
                 </div>
             )}

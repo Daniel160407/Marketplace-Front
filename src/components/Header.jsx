@@ -1,24 +1,38 @@
 import axios from 'axios';
 import '../style/Header.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import Login from './authorization/Login';
 
 // eslint-disable-next-line react/prop-types
-const Header = ({setProducts}) => {
+const Header = ({ setProducts }) => {
     const [showAddNewWindow, setShowAddNewWindow] = useState(false);
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
+    const [username, setUsername] = useState('');
+
+    const [isLoggedIn, setIsLoggedIn] = useState(Cookies.get('isLoggedIn'));
+    const [showLogin, setShowLogin] = useState(false);
+
+    useEffect(() => {
+        if(Cookies.get('email') !== undefined && Cookies.get('password') !== undefined){
+            setShowLogin(true);   
+        }
+    }, [])
 
     const addNew = (event) => {
         event.preventDefault();
-        
+
         const formData = new FormData();
         formData.append('title', title);
         formData.append('price', price);
         formData.append('description', description);
         formData.append('submittionTime', new Date().toLocaleDateString());
         formData.append('image', image);
+        formData.append('uploader', username);
+        console.log(username);
 
         axios.post('http://localhost:8080/marketplace/product', formData, {
             headers: {
@@ -40,10 +54,32 @@ const Header = ({setProducts}) => {
         setImage(event.target.files[0]);
     }
 
+    const handleLogout = () => {
+        Cookies.remove('isLoggedIn');
+        setIsLoggedIn(false);
+    }
+
+    const logIn = (isLoggedIn) => {
+        setIsLoggedIn(isLoggedIn);
+        setShowLogin(false);
+    }
+
     return (
         <div id="header">
             <h1 id="title">Marketplace</h1>
-            <button className="addNewBtn" onClick={() => setShowAddNewWindow(true)}>New</button>
+            {isLoggedIn ? (
+                <>
+                    <button className="addNewBtn" onClick={() => setShowAddNewWindow(true)}>New</button>
+                    <button className='logInButton' onClick={handleLogout}>Log Out</button>
+                </>
+            ) : (
+                <>
+                    <button className='logInButton' onClick={() => setShowLogin(!showLogin)}>Log In</button>
+                    {showLogin && (
+                        <Login logIn={logIn} />
+                    )}
+                </>
+            )}
             {showAddNewWindow && (
                 <div className="addNewWindowContainer">
                     <form className="add-new-window" onSubmit={addNew}>
