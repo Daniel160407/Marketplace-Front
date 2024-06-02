@@ -34,7 +34,6 @@ const Header = ({ setProducts }) => {
         formData.append('title', title);
         formData.append('price', price);
         formData.append('description', description);
-        formData.append('submittionTime', new Date().toLocaleDateString());
         formData.append('image', image);
         formData.append('uploader', username);
 

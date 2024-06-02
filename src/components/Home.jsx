@@ -1,15 +1,16 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import '../style/Home.scss';
 
-// eslint-disable-next-line react/prop-types
-const Home = ({updatedProducts}) => {
+const Home = ({ updatedProducts }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [products, setProducts] = useState([]);
     const [showProduct, setShowProduct] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [sortCriteria, setSortCriteria] = useState('name'); // Default sort by name
+    const [sortDirection, setSortDirection] = useState('asc'); // Default sort direction
 
     useEffect(() => {
         axios.get('http://localhost:8080/marketplace/product/amount')
@@ -18,10 +19,10 @@ const Home = ({updatedProducts}) => {
     }, []);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/marketplace/product?page=${currentPage - 1}`)
+        axios.get(`http://localhost:8080/marketplace/product?page=${currentPage - 1}&sort=${sortCriteria}&direction=${sortDirection}`)
             .then(response => setProducts(response.data))
             .catch(error => console.error('Error fetching products:', error));
-    }, [currentPage]);
+    }, [currentPage, sortCriteria, sortDirection]);
 
     useEffect(() => {
         setProducts(updatedProducts);
@@ -34,7 +35,7 @@ const Home = ({updatedProducts}) => {
     };
 
     const renderPageNumbers = () => {
-        return Array.from({length: totalPages}, (_, i) => i + 1).map(pageNumber => (
+        return Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
             <li
                 key={pageNumber}
                 className={`pagination-item ${pageNumber === currentPage ? 'active' : ''}`}
@@ -49,6 +50,23 @@ const Home = ({updatedProducts}) => {
         <div className="home-container">
             {!showProduct ? (
                 <>
+                    <div className="sort-options">
+                        <label>
+                            Sort by:
+                            <select value={sortCriteria} onChange={(e) => setSortCriteria(e.target.value)}>
+                                <option value="name">Name</option>
+                                <option value="price">Price</option>
+                                <option value="submissionTime">Submission Time</option>
+                            </select>
+                        </label>
+                        <label>
+                            Direction:
+                            <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+                                <option value="asc">Ascending</option>
+                                <option value="desc">Descending</option>
+                            </select>
+                        </label>
+                    </div>
                     <div className="products">
                         {products.map((product, index) => (
                             <div
@@ -59,7 +77,7 @@ const Home = ({updatedProducts}) => {
                                     setShowProduct(true);
                                 }}
                             >
-                                <img src={product.photoUrl} alt={product.name}/>
+                                <img src={product.photoUrl} alt={product.name} />
                                 <h1>{product.name}</h1>
                                 <p>{product.price}</p>
                             </div>
@@ -85,10 +103,10 @@ const Home = ({updatedProducts}) => {
                 </>
             ) : (
                 <div className="productInfo">
-                    <img className="arrow" src="/svg/arrow.svg" alt="Back" onClick={() => setShowProduct(false)}/>
-                    <img className="productImg" src={selectedProduct.photoUrl} alt={selectedProduct.name}/>
+                    <img className="arrow" src="/svg/arrow.svg" alt="Back" onClick={() => setShowProduct(false)} />
+                    <img className="productImg" src={selectedProduct.photoUrl} alt={selectedProduct.name} />
                     <h1>{selectedProduct.name}</h1>
-                    <p>{selectedProduct.submittionTime}</p>
+                    <p>{selectedProduct.submissionTime}</p>
                     <p>{selectedProduct.uploader}</p>
                     <p>{selectedProduct.description}</p>
                 </div>
