@@ -9,7 +9,7 @@ const Home = ({ updatedProducts }) => {
     const [showProduct, setShowProduct] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [sortCriteria, setSortCriteria] = useState('name');
-    const [sortDirection, setSortDirection] = useState('asc');
+    const [sortDirection, setSortDirection] = useState('desc');
 
     useEffect(() => {
         axios.get('http://localhost:8080/marketplace/product/amount')
